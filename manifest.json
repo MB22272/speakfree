@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "SpeakFree Translator",
+  "version": "1.0",
+  "description": "Translate anything, anywhere — offline and free.",
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "permissions": ["storage"]
+}
