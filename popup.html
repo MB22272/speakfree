@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: system-ui; padding: 16px; width: 300px; }
+    #input, #output { width: 100%; padding: 8px; margin: 8px 0; }
+    button { background: #0066ff; color: white; border: none; padding: 10px; width: 100%; }
+  </style>
+</head>
+<body>
+  <h3>SpeakFree</h3>
+  <textarea id="input" placeholder="Select any text on a page..."></textarea>
+  <select id="target-lang">
+    <option value="es">Spanish</option>
+    <option value="en">English</option>
+    <option value="fr">French</option>
+    <option value="sw">Swahili</option>
+  </select>
+  <button onclick="translate()">Translate</button>
+  <div id="output" style="background:#f0f0f0; padding:8px; margin-top:8px;"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@huggingface/transformers@latest"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
