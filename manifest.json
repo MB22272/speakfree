@@ -2,9 +2,15 @@
   "manifest_version": 3,
   "name": "SpeakFree Translator",
   "version": "1.0",
-  "description": "Translate anything, anywhere — offline and free.",
+  "description": "Offline AI translator powered by the community",
   "action": {
     "default_popup": "popup.html"
   },
-  "permissions": ["storage"]
+  "permissions": ["storage"],
+  "host_permissions": [
+    "https://cdn.jsdelivr.net/*"
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval' https://cdn.jsdelivr.net; object-src 'self'"
+  }
 }
