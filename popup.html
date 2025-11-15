@@ -1,25 +1,72 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="utf-8">
   <style>
     body { font-family: system-ui; padding: 16px; width: 300px; }
-    #input, #output { width: 100%; padding: 8px; margin: 8px 0; }
-    button { background: #0066ff; color: white; border: none; padding: 10px; width: 100%; }
+    #input, #output, select { width: 100%; padding: 8px; margin: 8px 0; }
+    button { background: #0066ff; color: white; border: none; padding: 10px; width: 100%; cursor: pointer; margin: 4px 0; }
+    button:disabled { background: #ccc; }
+    .test { background: #00aa00; }
   </style>
 </head>
 <body>
   <h3>SpeakFree</h3>
-  <textarea id="input" placeholder="Select any text on a page..."></textarea>
+
+  <!-- TEST BUTTON -->
+  <button class="test" onclick="alert('JS WORKS!')">TEST: Click Me</button>
+
+  <textarea id="input" placeholder="Paste text here..."></textarea>
   <select id="target-lang">
     <option value="es">Spanish</option>
     <option value="en">English</option>
     <option value="fr">French</option>
-    <option value="sw">Swahili</option>
+    <option value="zh">Chinese</option>
   </select>
-  <button onclick="translate()">Translate</button>
-  <div id="output" style="background:#f0f0f0; padding:8px; margin-top:8px;"></div>
+  <button id="translate-btn">Translate</button>
+  <div id="output" style="background:#f0f0f0; padding:8px; margin-top:8px; min-height:40px;"></div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@huggingface/transformers@latest"></script>
-  <script src="popup.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2"></script>
+  <script>
+    // Test if JS runs
+    console.log("popup.js loading...");
+
+    let translator = null;
+    const btn = document.getElementById('translate-btn');
+    const output = document.getElementById('output');
+
+    async function translate() {
+      const text = document.getElementById('input').value.trim();
+      if (!text) {
+        output.innerText = "Type something!";
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerText = "Loading AI...";
+      output.innerText = "Downloading model (~300MB)...";
+
+      try {
+        if (!translator) {
+          translator = await Xenova.pipeline('translation', 'Xenova/nllb-200-distilled-600M');
+        }
+        btn.innerText = "Translating...";
+        const result = await translator(text, {
+          src_lang: 'eng_Latn',
+          tgt_lang: document.getElementById('target-lang').value + '_Latn'
+        });
+        output.innerText = result[0].translation_text;
+      } catch (e) {
+        output.innerText = "Error: " + e.message;
+        console.error(e);
+      } finally {
+        btn.disabled = false;
+        btn.innerText = "Translate";
+      }
+    }
+
+    // Attach click
+    btn.addEventListener('click', translate);
+  </script>
 </body>
 </html>
